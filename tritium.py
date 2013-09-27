@@ -2,6 +2,7 @@
 # tritium.py
 # balanced ternary module for Python
 # written after being inspired by https://en.wikipedia.org/wiki/Balanced_ternary
+# and http://www.computer-museum.ru/english/setun.htm
 
 from collections import namedtuple
 
@@ -33,7 +34,7 @@ def check(tn, force_check=False):
         return tn
 
     if tn.n < 0:
-        raise BadTritNumberException('internal value of TritNumber is negative: 0x%x' % tn.n)
+        raise BadTritNumberException('internal value of TritNumber is negative: -0x%x' % -tn.n)
 
     n = tn.n
     all01 = 0x55555555
