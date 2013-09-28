@@ -22,7 +22,7 @@ class TritNumber(namedtuple('TritNumber', 'n checked')):   # n is a non-zero int
         if len(keys) != 0 or len(args) > 2:
             raise ValueError('expected either a string or (integer-bitmap, boolean) as arguments')
         if len(args) == 2:
-            return _tuple.__new__(_cls, args)   # this is the standard named tuple behavior
+            return tuple.__new__(_cls, args)    # this is the standard named tuple behavior
         # now, we are processing a string that matches /\*?(0g)?[T01]+/
         s = args[0]
         n = 0
@@ -39,7 +39,7 @@ class TritNumber(namedtuple('TritNumber', 'n checked')):   # n is a non-zero int
             if not trit_to_bit.has_key(digit):
                 raise ValueError('invalid trinary digit %r' % digit)
             n = (n << 2) | trit_to_bit[digit]
-        return _tuple.__new__(_cls, (n, True))
+        return tuple.__new__(_cls, (n, True))
 
     def __str__(self):
         s = '0g'
