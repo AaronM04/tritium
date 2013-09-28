@@ -21,6 +21,18 @@ bit_to_tritval = {0b11: -1,
                   0b00:  0,
                   0b01:  1}
 
+magic_map ={0: (0b0000, 0b00),  #00
+            1: (0b0000, 0b01),  #01
+            2: (0b0100, 0b11),  #1T
+            3: (0b0100, 0b00),  #10
+            4: (0b0000, 0b00),  #00
+            5: (0b0000, 0b01),  #01
+            6: (0b1100, 0b01),  #T1
+            7: (0b0000, 0b11),  #0T
+            9: (0b1100, 0b00)}  #T0
+
+
+
 charset_base27 = 'MNPQRSTUVWXYZ0123456789ABCD'  # I left out 'O' because it looks too much like '0'
 
 def _convert_int(x):
@@ -63,6 +75,31 @@ class TritNumber(namedtuple('TritNumber', 'n checked')):   # n is a non-zero int
                 raise ValueError('invalid trinary digit %r' % digit)
             n = (n << 2) | trit_to_bit[digit]
         return tuple.__new__(_cls, (n, True))
+
+    def __add__(self, x):
+        if type(x) is int or type(x) is long:
+            # convert to trit bitmap
+            q = _convert_int(x)
+        else:
+            q = x.n
+
+        carry = 0
+        p = self.n
+        shift = 0
+        total = 0
+        while p > 0 or q > 0 or carry > 0:
+            pbits, qbits, carrybits = (p & 0b11, q & 0b11, carry & 0b11)
+            # magic! :-)
+            naive_sum = pbits + qbits + carrybits
+            high_pair, low_pair = magic_map[naive_sum]
+            carry |= high_pair
+            total |= (low_pair << shift)
+            p >>= 2
+            q >>= 2
+            carry >>= 2
+            shift += 2
+        return TritNumber(total, True)
+
 
     def __int__(self):
         "convert to a regular binary integer"
