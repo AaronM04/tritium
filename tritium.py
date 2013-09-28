@@ -34,9 +34,6 @@ class TritNumber(namedtuple('TritNumber', 'n checked')):   # n is a non-zero int
         return 'TritNumber("%s")' % str(self)
 
 
-class BadTritNumberException(Exception): pass
-
-
 
 def trit(n):
     "given a regular binary number, return a TritNumber"
@@ -47,21 +44,21 @@ def trit(n):
 def check(tn, force_check=False):
     """given a TritNumber, check it; if force_check is True, do the check even
     if tn.checked is True; returns the same TritNumber if it is valid, otherwise
-    raises a BadTritNumberException"""
+    raises a ValueError exception"""
     if type(tn) is not TritNumber:
-        raise BadTritNumberException('not a TritNumber: %r' % tn)
+        raise ValueError('not a TritNumber: %r' % tn)
 
     if tn.checked and (not force_check):
         return tn
 
     if tn.n < 0:
-        raise BadTritNumberException('internal value of TritNumber is negative: -0x%x' % -tn.n)
+        raise ValueError('internal value of TritNumber is negative: -0x%x' % -tn.n)
 
     n = tn.n
     all01 = 0x55555555
     while n > 0:
         if ((n>>1) & ~n) & all01  != 0:
-            raise BadTritNumberException('invalid trit in internal value of TritNumber: 0x%x' % tn.n)
+            raise ValueError('invalid trit in internal value of TritNumber: 0x%x' % tn.n)
         n >>= 32
 
     return TritNumber(tn.n, True)     # True because checked
