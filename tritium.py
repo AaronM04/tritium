@@ -11,7 +11,27 @@ charset_base3 = 'T01'    # represented by 0b11, 0b00, and 0b01, respectively; 0b
 
 charset_base27 = 'MN' + ''.join([chr(ord('A')+x) for x in xrange(13+2, 26)]) + '0123456789ABCD'
 
-TritNumber = namedtuple('TritNumber', 'n checked')     # n is a non-zero integer (really a bitmap); checked is boolean
+class TritNumber(namedtuple('TritNumber', 'n checked')):   # n is a non-zero integer (really a bitmap); checked is boolean
+    __slots__ = ()
+
+    def __str__(self):
+        s = '0g'
+        if not self.checked:   # if unchecked, prepend a '*'
+            s = '*' + s
+        # calculate the trits
+        digits = []
+        n = self.n
+        while n > 0:
+            d = n & 0b11
+            if d >= 2:
+                d -= 2
+            digits.insert(0, '!T01'[d])     # '! is for an invalid trit
+            n >>= 2
+        if len(digits) == 0:
+            digits = ['0']
+        s += ''.join(digits)
+        return s
+
 
 class BadTritNumberException(Exception): pass
 
