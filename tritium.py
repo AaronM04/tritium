@@ -24,7 +24,7 @@ bit_to_tritval = {0b11: -1,
 magic_map ={0: (0b0000, 0b00),  #00
             1: (0b0000, 0b01),  #01
             2: (0b0100, 0b11),  #1T
-            3: (0b0100, 0b00),  #10
+            3: (0b0000, 0b11),  #10
             4: (0b0000, 0b00),  #00
             5: (0b0000, 0b01),  #01
             6: (0b1100, 0b01),  #T1
@@ -90,8 +90,11 @@ class TritNumber(namedtuple('TritNumber', 'n checked')):   # n is a non-zero int
         while p > 0 or q > 0 or carry > 0:
             pbits, qbits, carrybits = (p & 0b11, q & 0b11, carry & 0b11)
             # magic! :-)
-            naive_sum = pbits + qbits + carrybits
-            high_pair, low_pair = magic_map[naive_sum]
+            if (pbits, qbits, carrybits) == (1,1,1):
+                high_pair, low_pair = (0b0100, 0b00)
+            else:
+                naive_sum = pbits + qbits + carrybits
+                high_pair, low_pair = magic_map[naive_sum]
             carry |= high_pair
             total |= (low_pair << shift)
             p >>= 2
