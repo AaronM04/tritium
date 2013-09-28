@@ -9,7 +9,7 @@ from collections import namedtuple
 
 charset_base3 = 'T01'    # represented by 0b11, 0b00, and 0b01, respectively; 0b10 is invalid
 
-charset_base27 = 'MN' + ''.join([chr(ord('A')+x) for x in xrange(13+2, 26)]) + '0123456789ABCD'
+charset_base27 = 'MNPQRSTUVWXYZ0123456789ABCD'  # I left out 'O' because it looks too much like '0'
 
 class TritNumber(namedtuple('TritNumber', 'n checked')):   # n is a non-zero integer (really a bitmap); checked is boolean
     __slots__ = ()
