@@ -22,7 +22,7 @@ class TritNumber(namedtuple('TritNumber', 'n checked')):   # n is a non-zero int
         if len(keys) != 0 or len(args) > 2:
             raise ValueError('expected either a string or (integer-bitmap, boolean) as arguments')
         if len(args) == 2:
-            return _tuple.__new__(_cls, tuple(args))    # this is the standard named tuple behavior
+            return _tuple.__new__(_cls, args)   # this is the standard named tuple behavior
         # now, we are processing a string that matches /\*?(0g)?[T01]+/
         s = args[0]
         n = 0
