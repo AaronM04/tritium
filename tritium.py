@@ -13,6 +13,14 @@ trit_to_bit  = {'T': 0b11,
                 '0': 0b00,
                 '1': 0b01}
 
+bit_to_trit = {0b11: 'T',
+               0b00: '0',
+               0b01: '1'}
+
+bit_to_tritval = {0b11: -1,
+                  0b00:  0,
+                  0b01:  1}
+
 charset_base27 = 'MNPQRSTUVWXYZ0123456789ABCD'  # I left out 'O' because it looks too much like '0'
 
 class TritNumber(namedtuple('TritNumber', 'n checked')):   # n is a non-zero integer (really a bitmap); checked is boolean
@@ -40,6 +48,20 @@ class TritNumber(namedtuple('TritNumber', 'n checked')):   # n is a non-zero int
                 raise ValueError('invalid trinary digit %r' % digit)
             n = (n << 2) | trit_to_bit[digit]
         return tuple.__new__(_cls, (n, True))
+
+    def __int__(self):
+        "convert to a regular binary integer"
+        x = 0
+        n = self.n
+        z = 1
+        while n > 0:
+            bitpair = n & 0b11
+            if bitpair == 0b10:
+                raise ValueError('invalid trinary digit')
+            x += bit_to_tritval[ bitpair ]*z
+            n >>= 2
+            z *= 3
+        return x
 
     def __str__(self):
         s = '0g'
