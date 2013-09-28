@@ -23,6 +23,21 @@ bit_to_tritval = {0b11: -1,
 
 charset_base27 = 'MNPQRSTUVWXYZ0123456789ABCD'  # I left out 'O' because it looks too much like '0'
 
+def _convert_int(x):
+    "given a regular binary number, convert to a bitmap of trits"
+    n = 0b0
+    shift = 0
+    while x != 0:
+        bitpair = (x%3) & 0b11
+        if bitpair == 0b10:
+            bitpair = 0b11
+        n |= bitpair << shift
+        shift += 2
+        x = (x+1)/3
+    return n
+
+
+
 class TritNumber(namedtuple('TritNumber', 'n checked')):   # n is a non-zero integer (really a bitmap); checked is boolean
     __slots__ = ()
 
@@ -81,12 +96,6 @@ class TritNumber(namedtuple('TritNumber', 'n checked')):   # n is a non-zero int
 
     def __repr__(self):
         return 'TritNumber("%s")' % str(self)
-
-
-
-def trit(n):
-    "given a regular binary number, return a TritNumber"
-    pass #XXX
 
 
 
