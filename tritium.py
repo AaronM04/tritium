@@ -30,6 +30,9 @@ class TritNumber(namedtuple('TritNumber', 'n checked')):   # n is a non-zero int
         s += ''.join(digits)
         return s
 
+    def __repr__(self):
+        return 'TritNumber("%s")' % str(self)
+
 
 class BadTritNumberException(Exception): pass
 
