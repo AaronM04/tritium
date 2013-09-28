@@ -23,9 +23,7 @@ class TritNumber(namedtuple('TritNumber', 'n checked')):   # n is a non-zero int
         n = self.n
         while n > 0:
             d = n & 0b11
-            if d >= 2:
-                d -= 2
-            digits.insert(0, '!T01'[d])     # '! is for an invalid trit
+            digits.insert(0, '01!T'[d])     # '! is for an invalid trit
             n >>= 2
         if len(digits) == 0:
             digits = ['0']
